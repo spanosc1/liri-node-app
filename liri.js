@@ -70,9 +70,20 @@ function spotifyThis(song)
 }
 function omdb(movie)
 {
-	request('http://www.omdbapi.com/?t=' + movie, function (error, response, body) {
+	request('http://www.omdbapi.com/?tomatoes=true&t=' + movie, function (error, response, body) {
   	if (!error && response.statusCode == 200) {
-    	console.log(body); 
+  		var movieInfo = JSON.parse(body.replace(/[\[\]']+/g,''));
+    	console.log(movieInfo.Title);
+    	console.log("Year : " + movieInfo.Year);
+    	console.log("IMDB rating: " + movieInfo.imdbRating);
+    	console.log("Rotten Tomatoes Rating: " + movieInfo.tomatoRating);
+    	console.log("Country: " + movieInfo.Country);
+    	console.log("Language: " + movieInfo.Language);
+    	console.log("-------------------------------------------");
+    	console.log(movieInfo.Plot);
+    	console.log("-------------------------------------------");
+    	console.log("Actors: " + movieInfo.Actors);
+    	console.log(movieInfo.tomatoURL);
   	}
 })
 }
