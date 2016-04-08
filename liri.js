@@ -1,11 +1,12 @@
 var keys = require('./keys.js');
 var Twitter = require('twitter');
 var spotify = require('spotify');
+var request = require('request');
 var fs = require('fs');
 var random;
 var action = process.argv[2];
 var media = process.argv[3];
-var client = new Twitter(keys);
+var client = new Twitter(keys.twitterKeys);
 switch(action)
 {
 	case 'my-tweets':
@@ -15,6 +16,10 @@ switch(action)
 		spotifyThis(media);
 		break;
 	case 'movie-this':
+		if(!media)
+		{
+			media = 'Mr. Nobody';
+		}
 		omdb(media);
 		break;
 	case 'do-what-it-says':
@@ -65,5 +70,9 @@ function spotifyThis(song)
 }
 function omdb(movie)
 {
-
+	request('http://www.omdbapi.com/?t=' + movie, function (error, response, body) {
+  	if (!error && response.statusCode == 200) {
+    	console.log(body); 
+  	}
+})
 }
