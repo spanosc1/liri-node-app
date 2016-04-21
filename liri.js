@@ -3,7 +3,6 @@ var Twitter = require('twitter');
 var spotify = require('spotify');
 var request = require('request');
 var fs = require('fs');
-var random;
 var action = process.argv[2];
 var media = process.argv[3];
 var client = new Twitter(keys.twitterKeys);
@@ -13,6 +12,10 @@ switch(action)
 		displayTweets();
 		break;
 	case 'spotify-this-song':
+		if(!media)
+		{
+			media = 'What\'s my age again';
+		}	
 		spotifyThis(media);
 		break;
 	case 'movie-this':
@@ -45,9 +48,17 @@ function displayTweets()
 	var params = {screen_name: 'chrisspanos2'};
 	client.get('statuses/user_timeline', params, function(error, tweets, response){
   	if (!error) {
-    	console.log(tweets + " worked ");
+  		for(var i = 0; i < tweets.length; i++)
+  		{
+  			console.log(tweets[i].created_at + '\n');
+  			console.log(tweets[i].text);
+  			console.log('----------------------------');
+  		}
+    	
   	}
-  	console.log(error);
+  	else{
+  		console.log(error);
+  	}
 	});
 }
 function spotifyThis(song)
@@ -59,8 +70,8 @@ function spotifyThis(song)
   	}
   	for(var i = 0; i < 20; i++)
   	{
-  		console.log(i);
-  		console.log("atrist(s): " + data.tracks.items[i].artists.name);
+  		console.log(i + 1);
+  		console.log("Artist: " + data.tracks.items[i].artists[0].name);
  			console.log("song name: " + data.tracks.items[i].name);
  			console.log("preview song: " + data.tracks.items[i].preview_url);
  			console.log("album: " + data.tracks.items[i].album.name);
